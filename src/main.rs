@@ -1,7 +1,17 @@
 use std::io::{self, Write};
 use std::ops::Index;
 use std::process::exit;
+use clap::Parser;
 use termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
+
+
+#[derive(Parser)]
+#[clap(author, version, about, long_about = None)]
+struct Cli {
+    /// print debugging info (spoils the answer!)
+    #[clap(short, long)]
+    debug: bool
+}
 
 fn main() {
     println!("Enter a 5-letter word: ");
@@ -9,6 +19,10 @@ fn main() {
     let stdin = io::stdin();
     // TODO replace with random word from dictionary
     let word = "wordl";
+    let cli = Cli::parse();
+    if cli.debug {
+        println!("DEBUG: word: {}", word);
+    }
     // TODO display word at the beginning if debug flag is set
     let mut stdout = StandardStream::stdout(ColorChoice::Always);
     for n in (0..6).rev() {
