@@ -42,6 +42,7 @@ fn main() {
             exit(3);
         }
 
+        // TODO make sure the user enters a valid word, don't let it through if it's invalid
         if in_buffer.trim().eq(&word) {
             println!("correct!");
             stdout
@@ -91,8 +92,7 @@ fn fetch_word() -> String {
     let content = std::str::from_utf8(&dst).unwrap();
     let parsed: Value = serde_json::from_str(content).unwrap();
     if let Array(inner_vec) = parsed {
-        let first_el = inner_vec.get(0).unwrap();
-        if let Value::String(word) = first_el {
+        if let Some(Value::String(word)) = inner_vec.first() {
             word.clone()
         } else {
             panic!("Didn't get JSON ['word'] back from random-word-api")
