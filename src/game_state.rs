@@ -55,7 +55,11 @@ impl GameState {
                 .collect::<Vec<LetterPosition>>()
                 .try_into()
                 .unwrap();
-            Guess::Incorrect(self.total_guesses - self.guesses_made, pos_array)
+            Guess::Incorrect(
+                self.total_guesses - self.guesses_made,
+                pos_array,
+                guess.to_owned(),
+            )
         }
     }
 }
@@ -63,9 +67,15 @@ impl GameState {
 #[derive(Debug)]
 pub enum Guess {
     Correct,
-    Incorrect(u8, [LetterPosition; 5]),
+    Incorrect(u8, [LetterPosition; 5], String),
     InvalidWord,
     GameOver,
+}
+
+impl Guess {
+    pub fn is_terminal(&self) -> bool {
+        matches!(self, Guess::Correct | Guess::GameOver)
+    }
 }
 
 #[derive(Debug)]
