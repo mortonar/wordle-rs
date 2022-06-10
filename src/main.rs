@@ -1,6 +1,6 @@
 use clap::Parser;
 use std::io;
-use wordle_rs::guess_reader::GuessReader;
+use wordle_rs::guess_reader::{Error, GuessReader};
 use wordle_rs::guess_writer::{ConsoleGuessWriter, GuessWriter};
 use wordle_rs::{dictionary, game_state};
 
@@ -24,11 +24,26 @@ fn main() {
         println!("DEBUG: word: {}", &word);
     }
     loop {
-        let guess = guess_reader.get_guess().unwrap();
-        let guess = game_state.evaluate(guess.trim());
-        guess_writer.write(&guess);
-        if guess.is_terminal() {
-            break;
+        match guess_reader.get_guess() {
+            Ok(guess) => {
+                let guess = game_state.evaluate(guess.trim());
+                guess_writer.write(&guess);
+                if guess.is_terminal() {
+                    break;
+                }
+            }
+            // TODO Print these in red / add to the guess writer to print these?
+            Err(e) => match e {
+                Error::IOErrror(ioe) => {
+                    println!("Error entering word: {}", ioe)
+                }
+                Error::InvalidSize => {
+                    println!("Must enter a 5-letter word")
+                }
+                Error::InvalidCharacters => {
+                    println!("Word has invalid characters.")
+                }
+            },
         }
     }
 }
