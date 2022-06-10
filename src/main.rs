@@ -24,7 +24,7 @@ fn main() {
         println!("DEBUG: word: {}", &word);
     }
     loop {
-        let guess = guess_reader.get_guess();
+        let guess = guess_reader.get_guess().unwrap();
         let guess = game_state.evaluate(guess.trim());
         guess_writer.write(&guess);
         if guess.is_terminal() {
