@@ -21,8 +21,6 @@ impl ConsoleGuessWriter {
 impl GuessWriter for ConsoleGuessWriter {
     fn write(&mut self, guess: &Guess) {
         match guess {
-            // TODO Format this into a generic guess writer and implementing console-based guess writer.
-            //   What if we wanted to have a GUI or network-based guess writer?
             Guess::Correct => {
                 self.stdout
                     .set_color(ColorSpec::new().set_fg(Some(Color::Green)))

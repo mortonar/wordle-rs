@@ -22,7 +22,6 @@ impl GuessReader {
         if let Err(error) = self.input.read_line(&mut in_buffer) {
             return Err(Error::IOErrror(error));
         }
-        // TODO don't count these errors towards the tries
         // +1 for newline character
         if in_buffer.len() != 6 {
             return Err(Error::InvalidSize);
